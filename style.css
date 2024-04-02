@@ -1,0 +1,35 @@
+body{
+    background-color: #000000;
+}
+
+h1, h2, h3, h4, h5, h6{
+    color: #FFFFFF;
+}
+
+p{
+    color: #FFFFFF;
+    font-size: 50px;
+}
+
+.Media {
+    display: flex;
+    overflow-x: auto;
+}
+
+.Card {
+    border: 1px solid #FFFFFF;
+    margin: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 15px 0;
+    width: 300px;
+}
+
+.Note {
+    color: red;
+    font-weight: 700;
+    padding: 0;
+}
+    
