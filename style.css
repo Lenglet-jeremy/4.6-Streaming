@@ -1,3 +1,8 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+
 body{
     background-color: #000000;
 }
@@ -11,9 +16,34 @@ p{
     font-size: 50px;
 }
 
-.Media {
+.NavBar{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: #FF0000;
+    padding: 0px 50px;
+}
+.NavBarRight{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    
+}
+.NavBarRight p,
+.NavBarRight button{
+    margin: 0px 10px;
+}
+.Communication {
+    font-size: 15px;
+}
+
+.Section {
     display: flex;
     overflow-x: auto;
+}
+
+.Menu{
+    display: none;
 }
 
 .Card {
@@ -24,7 +54,7 @@ p{
     align-items: center;
     flex-direction: column;
     padding: 15px 0;
-    width: 300px;
+    width: 400px;
 }
 
 .Note {

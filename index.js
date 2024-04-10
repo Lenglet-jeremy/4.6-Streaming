@@ -4,7 +4,7 @@ const BASE_URL = "https://api.themoviedb.org/3/";
 const FILMS = "movie";
 const SERIES = "tv";
 const POPULARITE = "top_rated";
-const RECENT = "release_date";
+const RECENT = "release_date.desc";
 const AVENIR = "upcoming";
 const LANGUAGE = "language=fr-FR";
 const PAGES = "page=1";
@@ -14,25 +14,46 @@ const BASE_IMG = "https://image.tmdb.org/t/p/w500";
 let ID_FILM_SERIE = "";
 let IMG_LINK = BASE_IMG + ID_FILM_SERIE;
 
-const popularMoviesRequest  = `${BASE_URL}${FILMS}/${POPULARITE}?${API_KEY}&${LANGUAGE}&${PAGES}`;
-const recentMoviesRequest   = `${BASE_URL}${FILMS}/${RECENT}?${API_KEY}&${LANGUAGE}&${PAGES}`;
-const upComingMoviesRequest = `${BASE_URL}${FILMS}/${AVENIR}?${API_KEY}&${LANGUAGE}&${PAGES}`;
-const popularSeriesRequest  = `${BASE_URL}${SERIES}/${POPULARITE}?${API_KEY}&${LANGUAGE}&${PAGES}`;
-const recentSeriesRequest   = `${BASE_URL}${SERIES}/${RECENT}?${API_KEY}&${LANGUAGE}&${PAGES}`;
-const upComingSeriesRequest = `${BASE_URL}${SERIES}/${AVENIR}?${API_KEY}&${LANGUAGE}&${PAGES}`;
+const popularMoviesRequest  = `${BASE_URL}${FILMS}/${POPULARITE}?${API_KEY}&${LANGUAGE}`;
+const recentMoviesRequest   = `${BASE_URL}discover/${FILMS}?${RECENT}&${API_KEY}&${LANGUAGE}`;
+const upComingMoviesRequest = `${BASE_URL}${FILMS}/${AVENIR}?${API_KEY}&${LANGUAGE}`;
+const popularSeriesRequest  = `${BASE_URL}${SERIES}/${POPULARITE}?${API_KEY}&${LANGUAGE}`;
+const recentSeriesRequest   = `${BASE_URL}discover/${SERIES}?${RECENT}&${API_KEY}&${LANGUAGE}`;
+const upCominSeriesRequest = `${BASE_URL}discover/${SERIES}?on_the_air&${API_KEY}&${LANGUAGE}`;
 
 const body = document.querySelector("body");
 
-const media = document.createElement("div");
-media.classList.add("Media");
+const menuIcon = document.querySelector('.Menu');
+const navBarRight = document.querySelector('.NavBarRight');
 
-async function fetchMovies() {
+menuIcon.addEventListener('click', () => {
+    navBarRight.classList.toggle('visible');
+});
+
+// Ajoutez une écoute d'événement pour redimensionner l'écran
+window.addEventListener('resize', () => {
+    // Si la largeur de l'écran est supérieure à 800px et la classe visible est présente, la supprimer
+    if (window.innerWidth > 800 && navBarRight.classList.contains('visible')) {
+        navBarRight.classList.remove('visible');
+    }
+});
+
+
+async function displayPopularMovies(parag, URL) {
+    const sectionParag = document.createElement("p");
+    sectionParag.innerText = parag
+
+    const popularSection = await fetchMovies(URL);
+    
+    body.append(sectionParag, popularSection);
+}
+
+async function fetchMovies(URL) {
+    const Section = document.createElement("div");
+    Section.classList.add("Section");
     try {
 
-        const popularSection = document.createElement("p");
-        popularSection.innerText = "Les films populaires"
-
-        const response = await fetch(`${popularMoviesRequest}`);
+        const response = await fetch(`${URL}`);
         const data = await response.json();
         
         if (!response.ok){
@@ -40,16 +61,17 @@ async function fetchMovies() {
         }
 
         data.results.forEach(movie => {
-            media.append(createMediaElement(movie));
+            Section.append(createpopularElement(movie));
+            console.log(movie);
           });
-        body.append(popularSection, media)
 
     } catch (error) {
         console.error('Une erreur s\'est produite : ', error.message);
     }
+    return Section;
 }
 
-const createMediaElement = (movie) => {
+const createpopularElement = (movie) => {
 
     const card = document.createElement("div");
     card.classList.add("Card");
@@ -58,17 +80,38 @@ const createMediaElement = (movie) => {
     cover.src = `${BASE_IMG}${movie.poster_path}`;
     cover.style.width = "200px";
 
-    const titre = document.createElement("h3");
-    titre.innerText = movie.title;
+    const titre = document.createElement("h2");
+    if (movie.name)
+        titre.innerText = movie.name;
+    else
+        titre.innerText = movie.title;
     titre.style.color = "#FFFFFF";
 
-    const note = document.createElement("h4");
+    const note = document.createElement("h3");
     note.classList.add("Note")
     note.innerText = movie.vote_average.toFixed(1);
     note.style.color = "#FFFFFF";
 
-    card.append(cover, titre, note);
+    const votants = document.createElement("h4");
+    votants.classList.add("Votant");
+    votants.innerText = movie.vote_count
+
+    if(movie.release_date){
+        const releaseDate = document.createElement("h5");
+        releaseDate.classList.add("releaseDate");
+        releaseDate.innerText = movie.release_date
+    
+        card.append(cover, titre, note, votants, releaseDate);
+    } else 
+        card.append(cover, titre, note, votants);
     return card;
 }
 
-body.append(fetchMovies());
+displayPopularMovies("Les films populaires", popularMoviesRequest);
+displayPopularMovies("Les films recent", recentMoviesRequest);
+displayPopularMovies("Les films à venir", upComingMoviesRequest);
+
+displayPopularMovies("Les series populaires", popularSeriesRequest);
+displayPopularMovies("Les series recent", recentSeriesRequest);
+displayPopularMovies("Les series à venir", upCominSeriesRequest);
+

@@ -1,0 +1,25 @@
+.NavBar{
+    display: flex;
+    flex-direction: row; /* Change la direction de flexion en colonne */
+    align-items: center; /* Centre les éléments horizontalement */
+    background-color: #FF0000;
+    padding: 20px 50px; /* Ajuste la marge intérieure pour plus d'espace */
+}
+
+.NavBarRight{
+    display: none;
+}
+
+.Menu{
+    display: block;
+    width: 30px;
+    height: 30px;
+}
+.NavBarRight.visible {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    height: 200px;
+}
+
