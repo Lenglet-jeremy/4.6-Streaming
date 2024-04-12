@@ -107,13 +107,11 @@ const createpopularElement = (movie) => {
     return card;
 }
 
-async function displayAllSections() {
-    await displayPopularMovies("Les films populaires", popularMoviesRequest);
-    await displayPopularMovies("Les films récents", recentMoviesRequest);
-    await displayPopularMovies("Les films à venir", upComingMoviesRequest);
-    await displayPopularMovies("Les séries populaires", popularSeriesRequest);
-    await displayPopularMovies("Les séries récentes", recentSeriesRequest);
-    await displayPopularMovies("Les séries à venir", upCominSeriesRequest);
-}
+displayPopularMovies("Les films populaires", popularMoviesRequest);
+displayPopularMovies("Les films recent", recentMoviesRequest);
+displayPopularMovies("Les films à venir", upComingMoviesRequest);
 
-displayAllSections();
+displayPopularMovies("Les series populaires", popularSeriesRequest);
+displayPopularMovies("Les series recent", recentSeriesRequest);
+displayPopularMovies("Les series à venir", upCominSeriesRequest);
+

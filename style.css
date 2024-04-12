@@ -39,7 +39,7 @@ p{
 
 .Section {
     display: flex;
-    overflow-x: auto;
+    flex-wrap: wrap;
 }
 
 .Menu{
@@ -54,7 +54,7 @@ p{
     align-items: center;
     flex-direction: column;
     padding: 15px 0;
-    width: 400px;
+    width: 200px;
 }
 
 .Note {
