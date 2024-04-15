@@ -7,7 +7,7 @@ const POPULARITE = "top_rated";
 const RECENT = "release_date.desc";
 const AVENIR = "upcoming";
 const LANGUAGE = "language=fr-FR";
-const PAGES = "page=1";
+const PAGES = "page=2";
 
 
 const BASE_IMG = "https://image.tmdb.org/t/p/w500";
@@ -19,7 +19,7 @@ const recentMoviesRequest   = `${BASE_URL}discover/${FILMS}?${RECENT}&${API_KEY}
 const upComingMoviesRequest = `${BASE_URL}${FILMS}/${AVENIR}?${API_KEY}&${LANGUAGE}`;
 const popularSeriesRequest  = `${BASE_URL}${SERIES}/${POPULARITE}?${API_KEY}&${LANGUAGE}`;
 const recentSeriesRequest   = `${BASE_URL}discover/${SERIES}?${RECENT}&${API_KEY}&${LANGUAGE}`;
-const upCominSeriesRequest = `${BASE_URL}discover/${SERIES}?on_the_air&${API_KEY}&${LANGUAGE}`;
+const upCominSeriesRequest = `${BASE_URL}discover/${SERIES}?first_air_date.gte&${API_KEY}&${LANGUAGE}&${PAGES}`;
 
 const body = document.querySelector("body");
 
@@ -30,46 +30,12 @@ menuIcon.addEventListener('click', () => {
     navBarRight.classList.toggle('visible');
 });
 
-// Ajoutez une écoute d'événement pour redimensionner l'écran
 window.addEventListener('resize', () => {
-    // Si la largeur de l'écran est supérieure à 800px et la classe visible est présente, la supprimer
     if (window.innerWidth > 800 && navBarRight.classList.contains('visible')) {
         navBarRight.classList.remove('visible');
     }
 });
 
-
-async function displayPopularMovies(parag, URL) {
-    const sectionParag = document.createElement("p");
-    sectionParag.innerText = parag
-
-    const popularSection = await fetchMovies(URL);
-    
-    body.append(sectionParag, popularSection);
-}
-
-async function fetchMovies(URL) {
-    const Section = document.createElement("div");
-    Section.classList.add("Section");
-    try {
-
-        const response = await fetch(`${URL}`);
-        const data = await response.json();
-        
-        if (!response.ok){
-            throw new Error('Erreur lors de la récupération des films populaires');
-        }
-
-        data.results.forEach(movie => {
-            Section.append(createpopularElement(movie));
-            console.log(movie);
-          });
-
-    } catch (error) {
-        console.error('Une erreur s\'est produite : ', error.message);
-    }
-    return Section;
-}
 
 const createpopularElement = (movie) => {
 
@@ -107,11 +73,46 @@ const createpopularElement = (movie) => {
     return card;
 }
 
-displayPopularMovies("Les films populaires", popularMoviesRequest);
-displayPopularMovies("Les films recent", recentMoviesRequest);
-displayPopularMovies("Les films à venir", upComingMoviesRequest);
+async function fetchMovies(URL) {
+    const Section = document.createElement("div");
+    Section.classList.add("Section");
+    try {
 
-displayPopularMovies("Les series populaires", popularSeriesRequest);
-displayPopularMovies("Les series recent", recentSeriesRequest);
-displayPopularMovies("Les series à venir", upCominSeriesRequest);
+        const response = await fetch(`${URL}`);
+        const data = await response.json();
+        
+        if (!response.ok){
+            throw new Error('Erreur lors de la récupération des films/series');
+        }
 
+        data.results.forEach(movie => {
+            Section.append(createpopularElement(movie));
+            console.log(movie);
+          });
+
+    } catch (error) {
+        console.error('Une erreur s\'est produite : ', error.message);
+    }
+    return Section;
+}
+
+async function displayPopularMovies(parag, URL) {
+    const sectionParag = document.createElement("p");
+    sectionParag.classList.add("Parag");
+    sectionParag.innerText = parag;
+
+    const popularSection = await fetchMovies(URL);
+    
+    body.append(sectionParag, popularSection);
+}
+
+async function displayAll() {
+    await displayPopularMovies("Les films populaires", popularMoviesRequest);
+    await displayPopularMovies("Les films récents", recentMoviesRequest);
+    await displayPopularMovies("Les films à venir", upComingMoviesRequest);
+    await displayPopularMovies("Les séries populaires", popularSeriesRequest);
+    await displayPopularMovies("Les séries récentes", recentSeriesRequest);
+    await displayPopularMovies("Les séries à venir", upCominSeriesRequest);
+}
+
+displayAll();

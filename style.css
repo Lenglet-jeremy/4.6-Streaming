@@ -16,6 +16,12 @@ p{
     font-size: 50px;
 }
 
+.Parag{
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+}
+
 .NavBar{
     display: flex;
     flex-direction: row;
@@ -40,6 +46,7 @@ p{
 .Section {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
 }
 
 .Menu{
