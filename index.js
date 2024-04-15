@@ -30,11 +30,11 @@ menuIcon.addEventListener('click', () => {
     navBarRight.classList.toggle('visible');
 });
 
-window.addEventListener('resize', () => {
-    if (window.innerWidth > 800 && navBarRight.classList.contains('visible')) {
-        navBarRight.classList.remove('visible');
-    }
-});
+// window.addEventListener('resize', () => {
+//     if (window.innerWidth > 800 && navBarRight.classList.contains('visible')) {
+//         navBarRight.classList.remove('visible');
+//     }
+// });
 
 
 const createpopularElement = (movie) => {
